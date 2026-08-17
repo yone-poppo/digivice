@@ -10,16 +10,66 @@
             font-family: sans-serif;
             background-color: #121212;
             color: #e0e0e0;
-            max-width: 1050px;
-            margin: 0 auto;
             padding: 20px;
+        }
+        /* 全体を左右に配置するコンテナ */
+        .page-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1380px;
+            margin: 0 auto;
+            align-items: flex-start;
         }
         /* 画像保存対象の範囲 */
         #capture-area {
             background-color: #121212;
             padding: 20px;
             border-radius: 10px;
+            max-width: 1050px;
+            width: 100%;
+            box-sizing: border-box;
         }
+        /* 右側のサイドバー（画像保存には含まれない） */
+        .sidebar {
+            width: 280px;
+            background: #1e1e1e;
+            border: 1px solid #444;
+            padding: 15px;
+            border-radius: 10px;
+            color: #ccc;
+            font-size: 0.85em;
+            box-sizing: border-box;
+            margin-top: 55px;
+            flex-shrink: 0;
+        }
+        .sidebar h3 {
+            color: #ffcc00;
+            margin-top: 0;
+            text-align: center;
+            border-bottom: 1px solid #444;
+            padding-bottom: 8px;
+            font-size: 1.1em;
+        }
+        .research-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            color: #fff;
+        }
+        .research-table th, .research-table td {
+            border: 1px solid #444;
+            padding: 6px;
+            text-align: center;
+        }
+        .research-table th {
+            background: #333;
+            color: #ffcc00;
+        }
+        .research-table tr:nth-child(even) {
+            background: #252525;
+        }
+
         h1 {
             color: #4da6ff;
             border-bottom: 2px solid #333;
@@ -167,7 +217,7 @@
             margin-top: 30px;
         }
 
-        /* 水色枠：総合ステータス（高さを420pxに拡大してスクロールを解消） */
+        /* 水色枠：総合ステータス */
         .summary-box {
             background: #1a2634;
             border: 2px solid #0066cc;
@@ -222,7 +272,7 @@
             font-weight: bold;
         }
 
-        /* 黄色枠：チップ計算機（高さを420pxに統一） */
+        /* 黄色枠：チップ計算機 */
         .calculator-box {
             background: #342a1a;
             border: 2px solid #cc9900;
@@ -333,95 +383,141 @@
 </head>
 <body>
 
-    <div id="capture-area">
-        <h1>デジヴァイス シミュレーター</h1>
+    <div class="page-wrapper">
+        <!-- 画像として保存されるメインの枠 -->
+        <div id="capture-area">
+            <h1>デジヴァイス シミュレーター</h1>
 
-        <div class="section-title">【 外部パーツ 】</div>
-        <div class="slots-row" id="external-slots"></div>
+            <div class="section-title">【 外部パーツ 】</div>
+            <div class="slots-row" id="external-slots"></div>
 
-        <div class="section-title">【 内部パーツ 】</div>
-        <div class="slots-row" id="internal-slots"></div>
+            <div class="section-title">【 内部パーツ 】</div>
+            <div class="slots-row" id="internal-slots"></div>
 
-        <div class="bottom-section">
-            <div class="summary-box">
-                <h2>総合ステータス / 効果</h2>
-                <div class="summary-list" id="summary-list"></div>
-            </div>
+            <div class="bottom-section">
+                <div class="summary-box">
+                    <h2>総合ステータス / 効果</h2>
+                    <div class="summary-list" id="summary-list"></div>
+                </div>
 
-            <div class="calculator-box">
-                <h2>パーツシミュレーター</h2>
-                <div class="calc-description">現在のレベルと目標レベルを設定することで、必要なデジチップを確認できます。</div>
-                <div class="calc-form">
-                    <div class="calc-row">
-                        <span>現在レベル:</span>
-                        <div class="level-control-box" style="width: 195px;">
-                            <button type="button" class="level-btn step-btn" 
-                                onmousedown="startHold(() => changeCalcLevel('from', -5))" 
-                                onmouseup="stopHold()" onmouseleave="stopHold()" 
-                                onttouchstart="startHold(() => changeCalcLevel('from', -5))" 
-                                ontouchend="stopHold()">-5</button>
-                            <button type="button" class="level-btn" 
-                                onmousedown="startHold(() => changeCalcLevel('from', -1))" 
-                                onmouseup="stopHold()" onmouseleave="stopHold()" 
-                                onttouchstart="startHold(() => changeCalcLevel('from', -1))" 
-                                ontouchend="stopHold()">－</button>
-                            <div class="level-input-wrapper">
-                                <span>Lv:</span>
-                                <input type="number" id="calc-from-lv" value="1" min="1" max="100" class="level-input" oninput="calculateChips()">
+                <div class="calculator-box">
+                    <h2>パーツシミュレーター</h2>
+                    <div class="calc-description">現在のレベルと目標レベルを設定することで、必要なデジチップを確認できます。</div>
+                    <div class="calc-form">
+                        <div class="calc-row">
+                            <span>現在レベル:</span>
+                            <div class="level-control-box" style="width: 195px;">
+                                <button type="button" class="level-btn step-btn" 
+                                    onmousedown="startHold(() => changeCalcLevel('from', -5))" 
+                                    onmouseup="stopHold()" onmouseleave="stopHold()" 
+                                    onttouchstart="startHold(() => changeCalcLevel('from', -5))" 
+                                    ontouchend="stopHold()">-5</button>
+                                <button type="button" class="level-btn" 
+                                    onmousedown="startHold(() => changeCalcLevel('from', -1))" 
+                                    onmouseup="stopHold()" onmouseleave="stopHold()" 
+                                    onttouchstart="startHold(() => changeCalcLevel('from', -1))" 
+                                    ontouchend="stopHold()">－</button>
+                                <div class="level-input-wrapper">
+                                    <span>Lv:</span>
+                                    <input type="number" id="calc-from-lv" value="1" min="1" max="100" class="level-input" oninput="calculateChips()">
+                                </div>
+                                <button type="button" class="level-btn" 
+                                    onmousedown="startHold(() => changeCalcLevel('from', 1))" 
+                                    onmouseup="stopHold()" onmouseleave="stopHold()" 
+                                    onttouchstart="startHold(() => changeCalcLevel('from', 1))" 
+                                    ontouchend="stopHold()">＋</button>
+                                <button type="button" class="level-btn step-btn" 
+                                    onmousedown="startHold(() => changeCalcLevel('from', 5))" 
+                                    onmouseup="stopHold()" onmouseleave="stopHold()" 
+                                    onttouchstart="startHold(() => changeCalcLevel('from', 5))" 
+                                    ontouchend="stopHold()">+5</button>
                             </div>
-                            <button type="button" class="level-btn" 
-                                onmousedown="startHold(() => changeCalcLevel('from', 1))" 
-                                onmouseup="stopHold()" onmouseleave="stopHold()" 
-                                onttouchstart="startHold(() => changeCalcLevel('from', 1))" 
-                                ontouchend="stopHold()">＋</button>
-                            <button type="button" class="level-btn step-btn" 
-                                onmousedown="startHold(() => changeCalcLevel('from', 5))" 
-                                onmouseup="stopHold()" onmouseleave="stopHold()" 
-                                onttouchstart="startHold(() => changeCalcLevel('from', 5))" 
-                                ontouchend="stopHold()">+5</button>
                         </div>
-                    </div>
-                    <div class="calc-row">
-                        <span>目標レベル:</span>
-                        <div class="level-control-box" style="width: 195px;">
-                            <button type="button" class="level-btn step-btn" 
-                                onmousedown="startHold(() => changeCalcLevel('to', -5))" 
-                                onmouseup="stopHold()" onmouseleave="stopHold()" 
-                                onttouchstart="startHold(() => changeCalcLevel('to', -5))" 
-                                ontouchend="stopHold()">-5</button>
-                            <button type="button" class="level-btn" 
-                                onmousedown="startHold(() => changeCalcLevel('to', -1))" 
-                                onmouseup="stopHold()" onmouseleave="stopHold()" 
-                                onttouchstart="startHold(() => changeCalcLevel('to', -1))" 
-                                ontouchend="stopHold()">－</button>
-                            <div class="level-input-wrapper">
-                                <span>Lv:</span>
-                                <input type="number" id="calc-to-lv" value="40" min="1" max="100" class="level-input" oninput="calculateChips()">
+                        <div class="calc-row">
+                            <span>目標レベル:</span>
+                            <div class="level-control-box" style="width: 195px;">
+                                <button type="button" class="level-btn step-btn" 
+                                    onmousedown="startHold(() => changeCalcLevel('to', -5))" 
+                                    onmouseup="stopHold()" onmouseleave="stopHold()" 
+                                    onttouchstart="startHold(() => changeCalcLevel('to', -5))" 
+                                    ontouchend="stopHold()">-5</button>
+                                <button type="button" class="level-btn" 
+                                    onmousedown="startHold(() => changeCalcLevel('to', -1))" 
+                                    onmouseup="stopHold()" onmouseleave="stopHold()" 
+                                    onttouchstart="startHold(() => changeCalcLevel('to', -1))" 
+                                    ontouchend="stopHold()">－</button>
+                                <div class="level-input-wrapper">
+                                    <span>Lv:</span>
+                                    <input type="number" id="calc-to-lv" value="40" min="1" max="100" class="level-input" oninput="calculateChips()">
+                                </div>
+                                <button type="button" class="level-btn" 
+                                    onmousedown="startHold(() => changeCalcLevel('to', 1))" 
+                                    onmouseup="stopHold()" onmouseleave="stopHold()" 
+                                    onttouchstart="startHold(() => changeCalcLevel('to', 1))" 
+                                    ontouchend="stopHold()">＋</button>
+                                <button type="button" class="level-btn step-btn" 
+                                    onmousedown="startHold(() => changeCalcLevel('to', 5))" 
+                                    onmouseup="stopHold()" onmouseleave="stopHold()" 
+                                    onttouchstart="startHold(() => changeCalcLevel('to', 5))" 
+                                    ontouchend="stopHold()">+5</button>
                             </div>
-                            <button type="button" class="level-btn" 
-                                onmousedown="startHold(() => changeCalcLevel('to', 1))" 
-                                onmouseup="stopHold()" onmouseleave="stopHold()" 
-                                onttouchstart="startHold(() => changeCalcLevel('to', 1))" 
-                                ontouchend="stopHold()">＋</button>
-                            <button type="button" class="level-btn step-btn" 
-                                onmousedown="startHold(() => changeCalcLevel('to', 5))" 
-                                onmouseup="stopHold()" onmouseleave="stopHold()" 
-                                onttouchstart="startHold(() => changeCalcLevel('to', 5))" 
-                                ontouchend="stopHold()">+5</button>
                         </div>
-                    </div>
-                    <div class="calc-result" id="calc-result-text">
-                        必要デジチップ数: 0 個
+                        <div class="calc-result" id="calc-result-text">
+                            必要デジチップ数: 0 個
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="footer-credit">
+                by.ぽっぽ X: <a href="https://x.com/Poppo_DIGIMON" target="_blank">https://x.com/Poppo_DIGIMON</a>
+            </div>
         </div>
 
-        <div class="footer-credit">
-            by.ぽっぽ X: <a href="https://x.com/Poppo_DIGIMON" target="_blank">https://x.com/Poppo_DIGIMON</a>
+        <!-- 右側のサイドバー（画像保存には含まれない） -->
+        <div class="sidebar">
+            <h3>機能研究必要チップ数</h3>
+            <table class="research-table">
+                <thead>
+                    <tr><th>回数</th><th>必要数</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1回目</td><td>150</td></tr>
+                    <tr><td>2回目</td><td>250</td></tr>
+                    <tr><td>3回目</td><td>400</td></tr>
+                    <tr><td>4回目</td><td>600</td></tr>
+                    <tr><td>5回目</td><td>850</td></tr>
+                    <tr><td>6回目</td><td>1,150</td></tr>
+                    <tr><td>7回目</td><td>1,500</td></tr>
+                    <tr><td>8回目</td><td>1,900</td></tr>
+                    <tr><td>9回目</td><td>2,350</td></tr>
+                    <tr><td>10回目</td><td>2,850</td></tr>
+                    <tr><td>11回目</td><td>3,400</td></tr>
+                    <tr><td>12回目</td><td>4,000</td></tr>
+                    <tr><td>13回目</td><td>4,650</td></tr>
+                    <tr><td>14回目</td><td>5,350</td></tr>
+                    <tr><td>15回目</td><td>6,100</td></tr>
+                    <tr><td>16回目</td><td>6,900</td></tr>
+                    <tr><td>17回目</td><td>7,750</td></tr>
+                    <tr><td>18回目</td><td>8,650</td></tr>
+                    <tr><td>19回目</td><td>9,600</td></tr>
+                    <tr><td>20回目</td><td>10,600</td></tr>
+                    <tr><td>21回目</td><td>11,650</td></tr>
+                    <tr><td>22回目</td><td>12,750</td></tr>
+                    <tr><td>23回目</td><td>13,900</td></tr>
+                    <tr><td>24回目</td><td>15,100</td></tr>
+                    <tr><td>25回目</td><td>16,350</td></tr>
+                    <tr><td>26回目</td><td>17,650</td></tr>
+                    <tr><td>27回目</td><td>19,000</td></tr>
+                    <tr><td>28回目</td><td>20,400</td></tr>
+                    <tr><td>29回目</td><td>21,850</td></tr>
+                    <tr><td>30回目</td><td>23,350</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
+    <!-- 操作ボタンエリア -->
     <div class="action-buttons-area">
         <button type="button" class="action-btn" onclick="saveAsImage()">📷 画像として保存する</button>
         <a id="twitter-share-btn" href="#" target="_blank" class="action-btn twitter-btn">🐦 Xで投稿する</a>
