@@ -14,7 +14,7 @@
             margin: 0 auto;
             padding: 20px;
         }
-        /* 画像保存対象の範囲（赤の「」の範囲） */
+        /* 画像保存対象の範囲 */
         #capture-area {
             background-color: #121212;
             padding: 20px;
@@ -167,12 +167,13 @@
             margin-top: 30px;
         }
 
+        /* 水色枠：総合ステータス（高さを420pxに拡大してスクロールを解消） */
         .summary-box {
             background: #1a2634;
             border: 2px solid #0066cc;
             border-radius: 8px;
             padding: 20px;
-            height: 380px;
+            height: 420px;
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
@@ -221,12 +222,13 @@
             font-weight: bold;
         }
 
+        /* 黄色枠：チップ計算機（高さを420pxに統一） */
         .calculator-box {
             background: #342a1a;
             border: 2px solid #cc9900;
             border-radius: 8px;
             padding: 20px;
-            height: 380px;
+            height: 420px;
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
@@ -282,7 +284,6 @@
             margin: auto;
         }
 
-        /* アクションボタンエリア */
         .action-buttons-area {
             display: flex;
             justify-content: center;
@@ -332,7 +333,6 @@
 </head>
 <body>
 
-    <!-- 画像として保存されるメインの枠 -->
     <div id="capture-area">
         <h1>デジヴァイス シミュレーター</h1>
 
@@ -422,7 +422,6 @@
         </div>
     </div>
 
-    <!-- 操作ボタンエリア -->
     <div class="action-buttons-area">
         <button type="button" class="action-btn" onclick="saveAsImage()">📷 画像として保存する</button>
         <a id="twitter-share-btn" href="#" target="_blank" class="action-btn twitter-btn">🐦 Xで投稿する</a>
@@ -524,7 +523,6 @@
             holdInterval = null;
         }
 
-        // URLから状態を読み込む関数
         function loadFromURL() {
             const hash = window.location.hash.substring(1);
             if (!hash) return;
@@ -544,7 +542,6 @@
             });
         }
 
-        // 現在の状態をURLに書き込む関数
         function saveToURL() {
             const params = new URLSearchParams();
             slotConfig.forEach(slot => {
@@ -689,7 +686,6 @@
                 }
             });
 
-            // 起動時にURLから設定を復元
             loadFromURL();
 
             calculateTotals();
