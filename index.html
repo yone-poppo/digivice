@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>デジモンUP - デジヴァイス シミュレーター</title>
-    <!-- 画面を画像化するためのライブラリ (html2canvas) を読み込み -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
@@ -143,7 +142,7 @@
             white-space: nowrap;
         }
         .select-mirror {
-            display: none; /* 通常時は非表示、保存時のみ表示 */
+            display: none;
         }
         .level-control-box {
             display: flex;
@@ -395,7 +394,6 @@
 <body>
 
     <div class="page-wrapper">
-        <!-- 画像として保存されるメインの枠 -->
         <div id="capture-area">
             <h1>デジヴァイス シミュレーター</h1>
 
@@ -485,7 +483,6 @@
             </div>
         </div>
 
-        <!-- 右側のサイドバー（画像保存には含まれない） -->
         <div class="sidebar">
             <h3>機能研究必要チップ数</h3>
             <table class="research-table">
@@ -528,7 +525,6 @@
         </div>
     </div>
 
-    <!-- 操作ボタンエリア -->
     <div class="action-buttons-area">
         <button type="button" class="action-btn" onclick="saveAsImage()">📷 画像として保存する</button>
         <a id="twitter-share-btn" href="#" target="_blank" class="action-btn twitter-btn">🐦 Xで投稿する</a>
@@ -559,11 +555,11 @@
 
         const buttonParts = [
             { name: "未装着", label: "" },
-            { name: "ボタン（緑） - 通常攻撃ダメージ", label: "通常攻撃ダメージ", normalDmg: 10.00 },
-            { name: "ボタン（橙） - コンボダメージ", label: "コンボダメージ", comboDmg: 10.00 },
-            { name: "ボタン（紫） - 反撃ダメージ", label: "反撃ダメージ", counterDmg: 10.00 },
-            { name: "ボタン（青） - スキルダメージ", label: "スキルダメージ", skillDmg: 10.00 },
-            { name: "ボタン（赤） - ボスダメージ", label: "ボスダメージ", bossDmg: 10.00 }
+            { name: "ボタン（緑） - 通常攻撃ダメージ", label: "通常攻撃ダメージ", base: 10.00, step: 1.00, normalDmg: 10.00 },
+            { name: "ボタン（橙） - コンボダメージ", label: "コンボダメージ", base: 10.00, step: 1.00, comboDmg: 10.00 },
+            { name: "ボタン（紫） - 反撃ダメージ", label: "反撃ダメージ", base: 10.00, step: 1.00, counterDmg: 10.00 },
+            { name: "ボタン（青） - スキルダメージ", label: "スキルダメージ", base: 10.00, step: 1.00, skillDmg: 10.00 },
+            { name: "ボタン（赤） - ボスダメージ", label: "ボスダメージ", base: 8.00, step: 0.80, bossDmg: 8.00 }
         ];
 
         const bodyParts = [
@@ -863,7 +859,7 @@
                     } else if (slot.type === "button") {
                         let part = buttonParts[partIndex];
                         if (partIndex > 0) {
-                            let val = 10.00 + (level - 1) * 1.00;
+                            let val = part.base + (level - 1) * part.step;
                             previewDiv.innerText = `${part.label} +${val.toFixed(2)}% (Lv.${level})`;
                             activeStats.push({ label: part.label, val: val, rarity: slot.rarity, order: rarityOrder[slot.rarity] });
                         } else {
